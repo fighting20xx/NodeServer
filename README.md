@@ -1,2 +1,2 @@
-# NodeServer
-a  node server  base on egg
+# vs-server
+# Node服务
