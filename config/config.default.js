@@ -1,5 +1,5 @@
 'use strict';
-
+const path = require('path');
 module.exports = appInfo => {
     const config = exports = {};
 
@@ -42,5 +42,25 @@ module.exports = appInfo => {
         origin: () => '*',            //开启了这个之后，所有的 ip都可以访问， 所以解决了跨域的问题。
         credentials:true,
     };
+
+
+	exports.io = {
+		init: { }, // passed to engine.io
+		namespace: {
+			'/': {
+				connectionMiddleware: [],
+				packetMiddleware: [],
+			},
+		},
+	};
+
+	config.view = {
+		root: [
+			path.join(appInfo.baseDir, 'app/view'),
+			path.join(appInfo.baseDir, 'app/io/view'),
+		].join(','),
+		defaultViewEngine: 'nunjucks',
+	};
+
     return config;
 };

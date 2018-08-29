@@ -4,6 +4,7 @@
   "description": "a vs server project",
   "private": true,
   "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
     "egg": "^2.2.1",
     "egg-cors": "^2.1.0",
     "egg-mongoose": "^3.1.0",
@@ -12,6 +13,8 @@
     "egg-router-plus": "^1.2.1",
     "egg-scripts": "^2.5.0",
     "egg-sequelize": "^3.1.5",
+    "egg-socket.io": "^4.0.8",
+    "egg-view-nunjucks": "^2.2.0",
     "mysql2": "^1.5.3",
     "sequelize": "^4.38.0",
     "tedious": "^2.6.4"
@@ -30,7 +33,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server",
+    "start": "egg-scripts start --sticky --daemon --title=egg-server",
     "stop": "egg-scripts stop --title=egg-server-vs-server",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",

@@ -4,6 +4,7 @@ const Controller = require('../base');
 // const Controller = require('egg').Controller;
 const { CODE_KEY,MESSAGE_KEY,RESULT_KEY } = require('../../dim/ajaxStruct');
 const { SUCCESS,SUCCESS_DESC } = require('../../dim/StatusCode');
+const Spider = require('../../../util/secondHouse');
 
 
 
@@ -158,6 +159,22 @@ class ChartController extends Controller {
             [CODE_KEY]: SUCCESS,
             [MESSAGE_KEY]: SUCCESS_DESC,
             [RESULT_KEY]: res,
+        };
+    }
+
+    async reFleshData() {
+        const {
+            ctx,
+            service
+        } = this;
+
+		let spider = new Spider();
+		spider.run();
+
+        ctx.body = {
+            [CODE_KEY]: SUCCESS,
+            [MESSAGE_KEY]: SUCCESS_DESC,
+            [RESULT_KEY]: '成功了',
         };
     }
 }

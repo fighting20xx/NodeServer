@@ -59,6 +59,10 @@ class UsersService extends Service {
         });
         return res;
     }
+
+	async say() {
+		return 'Hello Man!' + new Date();
+	}
 }
 
 module.exports = UsersService;

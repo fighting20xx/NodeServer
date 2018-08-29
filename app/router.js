@@ -5,7 +5,7 @@
  */
 module.exports = app => {
     const V1Router = app.router.namespace('/api/v1/');
-    const { router, controller } = app;
+    const { router, controller, io} = app;
 
 
     router.get('/', controller.home.index);
@@ -39,5 +39,19 @@ module.exports = app => {
     V1Router.all('kanban/chart/deleteAll', controller.kanban.chart.deleteAll);   //删除所属的所有chart
     V1Router.all('kanban/chart/datasource', controller.kanban.chart.datasource);     //获取数据源
     V1Router.all('kanban/chart/executeSql', controller.kanban.chart.executeSql);     //执行Sql
+    V1Router.all('kanban/chart/reFleshData', controller.kanban.chart.reFleshData);     //执行Sql
+
+
+
+
+
+	router.get('/chat', io.controller.chat.index);
+
+	// app.io.of('/chat')
+	io.of('/').route('hello', io.controller.chat.hello);
+	io.of('/').route('connect', io.controller.chat.connect);
+	io.of('/').route('disconnect', io.controller.chat.disconnect);
+	io.of('/').route('message', io.controller.chat.message);
+	io.of('/').route('error', io.controller.chat.error);
 
 };
