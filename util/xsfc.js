@@ -18,7 +18,7 @@ function Spider(option) {
 		hostname: 'api.fangshijie.cn',
 		port: 80,
 		method:'get',
-		path: 'http://api.fangshijie.cn/api/SellHouse/GetList?Title=&City=-1&Zone=-1&Type=-1&Decoration=-1&Price=-1&PriceOrder=&OpeningDateOrder=&PageIndex=3&PageSize='+this.pageSize,
+		path: 'http://api.fangshijie.cn/api/SellHouse/GetList?Title=&City=-1&Zone=-1&Type=-1&Decoration=-1&Price=-1&PriceOrder=&OpeningDateOrder=&PageIndex=1&PageSize='+this.pageSize,
 		agent:new http.Agent({ keepAlive: true }),
 		headers: {
 			'Content-Type':'application/x-www-form-urlencoded',
@@ -46,7 +46,7 @@ Spider.prototype.getApiData =function (api) {
         res.on('end', function () {
             try {
                 var parsedData = JSON.parse(rawData);
-                // console.log(rawData);
+                console.log(rawData);
                 // that.endApi(api);
                 that.handleResultList(parsedData);
             } catch (e) {
@@ -115,6 +115,7 @@ Spider.prototype.run =function (cb) {
 	if (typeof cb === 'function') {
 		this.cb = cb;
 	}
+	console.log('总数据长度-----》 '+this.pageSize);
     this.getApiData();
 };
 
