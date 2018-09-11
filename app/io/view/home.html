@@ -22,6 +22,8 @@
 <body>
   <div class="console-wrapper">
     <pre id="console"></pre>
+      <button  type="button" onclick="sendMessage()">发送</button>
+      <button  type="button" onclick="reFleshData()">刷新数据</button>
   </div>
   <script src="https://cdn.bootcss.com/socket.io/2.1.0/socket.io.js"></script>
 
@@ -38,8 +40,6 @@
 	window.onload = function() {
 		// init
 		const socket = io("http://127.0.0.1:7001/", {
-
-			// 实际使用中可以在这里传递参数
 			query: {
 //				room: 'demo',
 //				userId: `client_${Math.random()}`,
@@ -50,8 +50,15 @@
 
 		socket.on('connect', () => {
 			const id = socket.id;
+			socket.on(id, msg => {
+				log('#receive,', msg);
+			});
+		});
 
-			log('#connect,', id, socket);
+		socket.on('online', () => {
+			const id = socket.id;
+
+			log('#online,', id, socket);
 
 			socket.on(id, msg => {
 				log('#receive,', msg);
@@ -60,9 +67,18 @@
 
 		// 接收在线用户信息
 		socket.on('message', msg => {
-			log('#message,', msg);
+//			log('#message,', msg);
 		});
 
+	// 接收在线用户信息
+		socket.on('broadcast', msg => {
+			log('#broadcast,', msg);
+		});
+
+		// 刷新数据
+		socket.on('reFleshData', msg => {
+			log('#reFleshData', msg);
+		});
 		// 系统事件
 		socket.on('disconnect', msg => {
 			log('#disconnect', msg);
@@ -72,8 +88,18 @@
 			log('#error');
 		});
 
+
 		window.socket = socket;
 	};
+	
+	
+	function sendMessage() {
+		socket.emit('message', 'mmmmmmmmmmmmmmmm'+new Date())
+	}
+
+	function reFleshData() {
+		socket.emit('reFleshData', 20)
+	}
 
   </script>
 </body>

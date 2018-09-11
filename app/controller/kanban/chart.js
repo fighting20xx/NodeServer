@@ -4,7 +4,7 @@ const Controller = require('../base');
 // const Controller = require('egg').Controller;
 const { CODE_KEY,MESSAGE_KEY,RESULT_KEY } = require('../../dim/ajaxStruct');
 const { SUCCESS,SUCCESS_DESC } = require('../../dim/StatusCode');
-const Spider = require('../../../util/secondHouse');
+const Spider = require('../../../util/xsfc');
 
 
 
@@ -127,13 +127,6 @@ class ChartController extends Controller {
             service,
         } = this;
 
-        // const res = await service.kanban.chart.executeSql(ctx.request.body);
-        // ctx.body = {
-        //     [CODE_KEY]: SUCCESS,
-        //     [MESSAGE_KEY]: SUCCESS_DESC,
-        //     [RESULT_KEY]: res,
-        // };
-
         let query = ctx.request.body;
 
         if (query.config && query.id && query.sql) {
@@ -167,15 +160,15 @@ class ChartController extends Controller {
             ctx,
             service
         } = this;
+		let query = ctx.query;
+		let spider = new Spider({pageSize:query.pageNumber?query.pageNumber:1000});
+		await spider.run(function () {});
+		ctx.body = {
+			[CODE_KEY]: SUCCESS,
+			[MESSAGE_KEY]: SUCCESS_DESC,
+			[RESULT_KEY]: '成功了',
+		};
 
-		let spider = new Spider();
-		spider.run();
-
-        ctx.body = {
-            [CODE_KEY]: SUCCESS,
-            [MESSAGE_KEY]: SUCCESS_DESC,
-            [RESULT_KEY]: '成功了',
-        };
     }
 }
 

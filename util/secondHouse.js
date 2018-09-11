@@ -9,10 +9,6 @@ var http = require('http');
 var cheerio = require('cheerio');
 var query = require('./sql_pool');
 
-
-var pageNumber = 200;                 //最大的页数
-
-
 var rootApi = "http://jjhygl.hzfc.gov.cn/webty/WebFyAction_getGpxxSelectList.jspx";   //?page=8
 var options = {
     hostname: 'jjhygl.hzfc.gov.cn',
@@ -30,12 +26,14 @@ var options = {
 
 
 function Spider() {
+    this.pageNumber = 10;        //最大的页数
     this.maxThread = 30;
     this.apiArr = [];
     this.busyApi = [];
+    this.cb = function () {};
 }
 Spider.prototype.findAllApi =function () {
-    for (var i = 1 ;i<pageNumber; i++){
+    for (var i = 1 ;i<this.pageNumber; i++){
         this.apiArr.push("page="+i);
     }
 };
@@ -45,7 +43,9 @@ Spider.prototype.eachAllApi =function () {
         if (newApi){
             this.busyApi.push(newApi);
             this.getApiData(newApi);
-            console.log("进度=================>"+((1 - this.apiArr.length/pageNumber)*100).toFixed(2) +"%")
+            let process = ((1 - this.apiArr.length/this.pageNumber)*100).toFixed(1);
+            this.cb.call(this,process);
+            console.log("进度=================>"+ process +"%")
         }else {
             console.log("=====================> END");
         }
@@ -122,7 +122,13 @@ Spider.prototype.spellSql =function (obj) {
     last_sql = last_sql.substring(0,last_sql.length-1)+ " ); ";
     return pre_sql + last_sql;
 };
-Spider.prototype.run =function () {
+Spider.prototype.run =function (number,cb) {
+
+	this.pageNumber = parseFloat(number);
+    console.log(this.pageNumber);
+	if (typeof cb === 'function') {
+		this.cb = cb;
+	}
     this.clear();
     this.findAllApi();
     this.startMutilThread();
